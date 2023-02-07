@@ -79,3 +79,31 @@ class BasicAuth(Auth):
             return username, password
         except ValueError:
             return None, None
+
+    def user_object_from_credentials(self, user_email: str, user_pwd: str) \
+            -> TypeVar('User'):
+        """
+        Checks for user depending on the credentials provided
+        Args:
+            user_email: user email
+            user_pwd: user password
+        Returns:
+            User object
+            None if user does not exist or user_email or
+            user_pwd is None or not string
+        """
+        if not user_email or \
+                type(user_email) is not str or \
+                not user_pwd or \
+                type(user_pwd) is not str:
+            return None
+        try:
+            users = User.search({'email': user_email})
+            if not users:
+                return None
+            for user in users:
+                if user.is_valid_password(user_pwd):
+                    return user
+            return None
+        except Exception:
+            return None
