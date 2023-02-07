@@ -33,4 +33,3 @@ def unauthorized():
       - a message that the user is not authorized
     """
     abort(401)
-
