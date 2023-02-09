@@ -39,3 +39,19 @@ class SessionAuth(Auth):
         if session_id is None or type(session_id) is not str:
             return None
         return self.user_id_by_session_id.get(session_id)
+
+    def current_user(self, request=None):
+        """
+        Retrieves user based on cookie value
+        Args:
+            request: The request object.
+        Returns:
+            The user object.
+        """
+        user_cookie = self.session_cookie(request)
+        if user_cookie is None:
+            return None
+        user_id = self.user_id_for_session_id(user_cookie)
+        if isinstance(user_id, dict):
+            user_id = user_id.get('user_id')
+        return User.get(user_id)
