@@ -68,5 +68,3 @@ class Auth:
             return None
         _my_session_id = getenv('SESSION_NAME')
         return request.cookies.get(_my_session_id, None)
-
-
