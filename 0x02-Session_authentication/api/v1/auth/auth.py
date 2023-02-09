@@ -5,6 +5,7 @@ all authentication methods
 """
 from typing import List
 from typing import TypeVar
+from os import getenv
 
 
 class Auth:
@@ -54,20 +55,18 @@ class Auth:
         """
         return None
 
-    def current_user(self, request=None) -> TypeVar('User'):
+    def session_cookie(self, request=None):
         """
-        Retrieves user depending on the credentials provided
-        from request
+        Retrieves the session cookie from the request.
         Args:
-            request: flask request object
+            request: The request to check.
+        Returns:
+            The session cookie if it exists.
+            None otherwise.
         """
-        header = self.authorization_header(request)
-        base64_authorization_header = \
-            self.extract_base64_authorization_header(header)
-        decoded_base64_authorization_header = \
-            self.decode_base64_authorization_header(
-                base64_authorization_header)
-        user_email, user_pwd = self.extract_user_credentials(
-            decoded_base64_authorization_header)
-        user = self.user_object_from_credentials(user_email, user_pwd)
-        return user
+        if not request:
+            return None
+        _my_session_id = getenv('SESSION_NAME')
+        return request.cookies.get(_my_session_id, None)
+
+
