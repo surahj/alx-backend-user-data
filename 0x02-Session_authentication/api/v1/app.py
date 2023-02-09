@@ -28,7 +28,6 @@ if auth_type:
         auth = Auth()
 
 
-
 @app.before_request
 def before_request():
     """
