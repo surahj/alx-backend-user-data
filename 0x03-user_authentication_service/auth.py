@@ -23,6 +23,15 @@ def _hash_password(password: str) -> bytes:
     return hashpw(password.encode(), gensalt())
 
 
+def _generate_uuid() -> str:
+    """
+    Method that generates a UUID.
+    Returns:
+        str: The generated UUID.
+    """
+    return str(uuid.uuid4())
+
+
 class Auth:
     """
     Auth class to interact with the authentication database.
@@ -53,6 +62,5 @@ class Auth:
                 raise ValueError("User {} already exists".format(email))
         except NoResultFound:
             hashed_password = _hash_password(password).decode('utf-8')
-            print(hashed_password)
             user = self._db.add_user(email, hashed_password)
             return user
