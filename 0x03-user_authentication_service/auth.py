@@ -23,15 +23,6 @@ def _hash_password(password: str) -> bytes:
     return hashpw(password.encode(), gensalt())
 
 
-def _generate_uuid() -> str:
-    """
-    Method that generates a UUID.
-    Returns:
-        str: The generated UUID.
-    """
-    return str(uuid.uuid4())
-
-
 class Auth:
     """
     Auth class to interact with the authentication database.
