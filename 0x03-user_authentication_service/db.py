@@ -49,3 +49,16 @@ class DB:
         data.add(user)
         self._session.commit()
         return user
+
+    def find_user_by(self, **kwargs) -> User:
+        """
+        Find a user by the given criteria
+        Args:
+            **kwargs: The criteria to search for
+        Returns:
+            User: The found user
+        """
+        user = self._session.query(User).filter_by(**kwargs).first()
+        if not user:
+            raise NoResultFound("No user found")
+        return user
