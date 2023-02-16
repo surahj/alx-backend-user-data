@@ -55,3 +55,22 @@ class Auth:
             hashed_password = _hash_password(password).decode('utf-8')
             user = self._db.add_user(email, hashed_password)
             return user
+
+    def valid_login(self, email: str, password: str) -> bool:
+        """
+        Method that validates a login.
+        Args:
+            email: The email of the user.
+            password: The password of the user.
+        Returns:
+            bool: True if the login is valid, False otherwise.
+        """
+        if not email or not password:
+            return False
+        try:
+            users_found = self._db.find_user_by(email=email)
+            hashed_password = users_found.hashed_password
+            return checkpw(password.encode(),
+                           hashed_password.encode('utf-8'))
+        except (NoResultFound, InvalidRequestError):
+            return False
