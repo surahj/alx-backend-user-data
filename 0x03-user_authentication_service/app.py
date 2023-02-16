@@ -76,3 +76,17 @@ def profile() -> tuple:
     if not user:
         abort(403)
     return jsonify({"email": user.email}), 200
+
+
+@app.route('/reset_password', methods=['POST'], strict_slashes=False)
+def reset_password() -> tuple:
+    """
+    Reset password route to send a reset token to the user
+    """
+    email = request.form.get('email')
+    try:
+        token = AUTH.get_reset_password_token(email)
+        return jsonify({"email": email,
+                        "reset_token": token}), 200
+    except ValueError:
+        abort(403)
